@@ -24,8 +24,6 @@ using Microsoft.Identity.Web;
 using Microsoft.IdentityModel.Tokens;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Configuration;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.MySql;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.PostgreSQL;
-using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.SqlServer;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Helpers;
 using Skoruba.Duende.IdentityServer.Admin.EntityFramework.Interfaces;
 using Skoruba.Duende.IdentityServer.Shared.Configuration.Authentication;
@@ -209,12 +207,6 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
 
             switch (databaseProvider.ProviderType)
             {
-                case DatabaseProviderType.SqlServer:
-                    services.RegisterSqlServerDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
-                case DatabaseProviderType.PostgreSQL:
-                    services.RegisterNpgSqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
-                    break;
                 case DatabaseProviderType.MySql:
                     services.RegisterMySqlDbContexts<TIdentityDbContext, TConfigurationDbContext, TPersistedGrantDbContext, TDataProtectionDbContext>(identityConnectionString, configurationConnectionString, persistedGrantsConnectionString, dataProtectionConnectionString);
                     break;
@@ -478,29 +470,6 @@ namespace Skoruba.Duende.IdentityServer.STS.Identity.Helpers
                 var databaseProvider = configuration.GetSection(nameof(DatabaseProviderConfiguration)).Get<DatabaseProviderConfiguration>();
                 switch (databaseProvider.ProviderType)
                 {
-                    case DatabaseProviderType.SqlServer:
-                        healthChecksBuilder
-                            .AddSqlServer(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{configurationTableName}]")
-                            .AddSqlServer(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{persistedGrantTableName}]")
-                            .AddSqlServer(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{identityTableName}]")
-                            .AddSqlServer(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT TOP 1 * FROM dbo.[{dataProtectionTableName}]");
-
-                        break;
-                    case DatabaseProviderType.PostgreSQL:
-                        healthChecksBuilder
-                            .AddNpgSql(configurationDbConnectionString, name: "ConfigurationDb",
-                                healthQuery: $"SELECT * FROM \"{configurationTableName}\" LIMIT 1")
-                            .AddNpgSql(persistedGrantsDbConnectionString, name: "PersistentGrantsDb",
-                                healthQuery: $"SELECT * FROM \"{persistedGrantTableName}\" LIMIT 1")
-                            .AddNpgSql(identityDbConnectionString, name: "IdentityDb",
-                                healthQuery: $"SELECT * FROM \"{identityTableName}\" LIMIT 1")
-                            .AddNpgSql(dataProtectionDbConnectionString, name: "DataProtectionDb",
-                                healthQuery: $"SELECT * FROM \"{dataProtectionTableName}\"  LIMIT 1");
-                        break;
                     case DatabaseProviderType.MySql:
                         healthChecksBuilder
                             .AddMySql(configurationDbConnectionString, name: "ConfigurationDb")
