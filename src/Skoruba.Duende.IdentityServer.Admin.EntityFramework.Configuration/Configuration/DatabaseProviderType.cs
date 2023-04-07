@@ -5,8 +5,6 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Configuration.Conf
 {
     public enum DatabaseProviderType
     {
-        SqlServer,
-        PostgreSQL,
         MySql
     }
 }

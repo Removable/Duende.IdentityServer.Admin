@@ -18,10 +18,10 @@
     "Skoruba.Duende.IdentityServer.AspNetIdentity": {
       "commandName": "Project",
       "launchBrowser": true,
+      "applicationUrl": "https://localhost:44310",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
-      },
-      "applicationUrl": "https://localhost:44310"
+      }
     }
   }
 }
