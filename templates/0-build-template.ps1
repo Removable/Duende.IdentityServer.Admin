@@ -3,7 +3,6 @@ param([string] $packagesVersions, [string]$gitBranchName = 'dev')
 # This script contains following steps:
 # - Download latest version of Skoruba.Duende.IdentityServer.Admin from git repository
 # - Use folders src and tests for project template
-# - Create db migrations for seed data
 
 $gitProject = "https://github.com/skoruba/Duende.IdentityServer.Admin"
 $gitProjectFolder = "Skoruba.Duende.IdentityServer.Admin"
@@ -11,6 +10,8 @@ $templateSrc = "template-build/content/src"
 $templateRoot = "template-build/content"
 $templateTests = "template-build/content/tests"
 $templateAdminProject = "template-build/content/src/Skoruba.Duende.IdentityServer.Admin"
+
+Get-Location
 
 function CleanBinObjFolders { 
 
@@ -111,16 +112,17 @@ Remove-Item ./$templateSrc/Skoruba.Duende.IdentityServer.Admin.UI -Force -recurs
 Remove-Item ./$templateTests -Force -recurse
 
 ######################################
+
 # Step 2
 $templateNuspecPath = "template-build/Skoruba.Duende.IdentityServer.Admin.Templates.nuspec"
-nuget pack $templateNuspecPath -NoDefaultExcludes
+nuget pack ./$templateNuspecPath -NoDefaultExcludes
 
 ######################################
 # Step 3
 $templateLocalName = "Skoruba.Duende.IdentityServer.Admin.Templates.$packagesVersions.nupkg"
 
 dotnet.exe new --uninstall Skoruba.Duende.IdentityServer.Admin.Templates
-dotnet.exe new -i $templateLocalName
+dotnet.exe new -i ./$templateLocalName
 
 ######################################
 # Step 4
@@ -133,7 +135,7 @@ dotnet new skoruba.duende.isadmin --name SkorubaDuende.IdentityServerAdmin --tit
 
 CleanBinObjFolders
 
-$templateFiles = Get-ChildItem .\SkorubaDuende.IdentityServerAdmin\src -include *.cs, *.csproj, *.cshtml -Recurse
+$templateFiles = Get-ChildItem ./SkorubaDuende.IdentityServerAdmin/src -include *.cs, *.csproj, *.cshtml -Recurse
 foreach ($file in $templateFiles) {
     Write-Host $file.PSPath
 
