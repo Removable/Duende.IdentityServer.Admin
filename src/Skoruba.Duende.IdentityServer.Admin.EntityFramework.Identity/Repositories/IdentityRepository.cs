@@ -65,6 +65,20 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositor
             return UserManager.Users.AnyAsync(x => x.Id.Equals(id));
         }
 
+        public async Task<bool> ExistsEmailOrUsernameAsync(string email, string username)
+        {
+            return await UserManager.Users.AnyAsync(x =>
+                x.Email.Equals(email, StringComparison.OrdinalIgnoreCase) ||
+                x.UserName.Equals(username, StringComparison.OrdinalIgnoreCase));
+        }
+
+        public async Task<bool> ExistsNicknameAsync(string nickname)
+        {
+            return await DbContext.Set<TUserClaim>().AnyAsync(x =>
+                x.ClaimType.Equals("nickname", StringComparison.OrdinalIgnoreCase) &&
+                x.ClaimValue.Equals(nickname, StringComparison.OrdinalIgnoreCase));
+        }
+
         public virtual Task<bool> ExistsRoleAsync(string roleId)
         {
             var id = ConvertKeyFromString(roleId);

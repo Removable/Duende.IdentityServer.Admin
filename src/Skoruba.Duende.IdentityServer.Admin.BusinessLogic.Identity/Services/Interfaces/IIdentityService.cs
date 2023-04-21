@@ -36,6 +36,10 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.In
     {
         Task<bool> ExistsUserAsync(string userId);
 
+        Task<bool> ExistsEmailOrUsernameAsync(string email, string username);
+
+        Task<bool> ExistsNicknameAsync(string nickname);
+
         Task<bool> ExistsRoleAsync(string roleId);
 
         Task<TUsersDto> GetUsersAsync(string search, int page = 1, int pageSize = 10);

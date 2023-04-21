@@ -72,6 +72,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services
             return true;
         }
 
+        public async Task<bool> ExistsEmailOrUsernameAsync(string email, string username)
+        {
+            return await IdentityRepository.ExistsEmailOrUsernameAsync(email, username);
+        }
+
+        public async Task<bool> ExistsNicknameAsync(string nickname)
+        {
+            return await IdentityRepository.ExistsNicknameAsync(nickname);
+        }
+
         public virtual async Task<bool> ExistsRoleAsync(string roleId)
         {
             var exists = await IdentityRepository.ExistsRoleAsync(roleId);
