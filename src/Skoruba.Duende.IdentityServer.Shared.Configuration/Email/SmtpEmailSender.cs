@@ -35,7 +35,7 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Email
                 _client.UseDefaultCredentials = true;
         }
 
-        public Task SendEmailAsync(string email, string subject, string htmlMessage)
+        public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
             _logger.LogInformation($"Sending email: {email}, subject: {subject}, message: {htmlMessage}");
             try
@@ -49,10 +49,8 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Email
                 var htmlView = AlternateView.CreateAlternateViewFromString(htmlMessage, null, MediaTypeNames.Text.Html);
                 mail.AlternateViews.Add(htmlView);
                 
-                _client.Send(mail);
+                await _client.SendMailAsync(mail);
                 _logger.LogInformation($"Email: {email}, subject: {subject}, message: {htmlMessage} successfully sent");
-                
-                return Task.CompletedTask;
             }
             catch (Exception ex)
             {
