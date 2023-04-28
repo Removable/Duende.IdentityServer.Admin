@@ -3,6 +3,7 @@
 
 using System;
 using System.Net.Mail;
+using System.Net.Mime;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Logging;
@@ -43,7 +44,10 @@ namespace Skoruba.Duende.IdentityServer.Shared.Configuration.Email
                 var mail = new MailMessage(from, email);
                 mail.IsBodyHtml = true;
                 mail.Subject = subject;
-                mail.Body = htmlMessage;
+                // mail.Body = htmlMessage;
+                
+                var htmlView = AlternateView.CreateAlternateViewFromString(htmlMessage, null, MediaTypeNames.Text.Html);
+                mail.AlternateViews.Add(htmlView);
                 
                 _client.Send(mail);
                 _logger.LogInformation($"Email: {email}, subject: {subject}, message: {htmlMessage} successfully sent");
