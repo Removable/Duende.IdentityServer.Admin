@@ -57,6 +57,9 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services.In
         Task<(IdentityResult identityResult, TKey roleId)> UpdateRoleAsync(TRoleDto role);
 
         Task<TUserDto> GetUserAsync(string userId);
+        
+        Task<TUserDto> GetUserByUserNameAsync(string userName);
+        Task<TUserDto> GetUserByEmailAsync(string email);
 
         Task<(IdentityResult identityResult, TKey userId)> CreateUserAsync(TUserDto user);
 

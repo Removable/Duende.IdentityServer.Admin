@@ -44,6 +44,8 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositor
         Task<(IdentityResult identityResult, TKey roleId)> UpdateRoleAsync(TRole role);
 
         Task<TUser> GetUserAsync(string userId);
+        Task<TUser> GetUserByUserNameAsync(string userName);
+        Task<TUser> GetUserByEmailAsync(string email);
 
         Task<(IdentityResult identityResult, TKey userId)> CreateUserAsync(TUser user);
 

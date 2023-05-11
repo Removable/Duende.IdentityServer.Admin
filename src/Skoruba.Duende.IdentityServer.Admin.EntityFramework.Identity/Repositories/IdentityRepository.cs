@@ -193,6 +193,16 @@ namespace Skoruba.Duende.IdentityServer.Admin.EntityFramework.Identity.Repositor
             return UserManager.FindByIdAsync(userId);
         }
 
+        public async Task<TUser> GetUserByUserNameAsync(string userName)
+        {
+            return await UserManager.FindByNameAsync(userName);
+        }
+
+        public async Task<TUser> GetUserByEmailAsync(string email)
+        {
+            return await UserManager.FindByEmailAsync(email);
+        }
+
         /// <summary>
         /// Create a new user
         /// </summary>

@@ -204,6 +204,30 @@ namespace Skoruba.Duende.IdentityServer.Admin.BusinessLogic.Identity.Services
             return userDto;
         }
 
+        public async Task<TUserDto> GetUserByUserNameAsync(string userName)
+        {
+            var identity = await IdentityRepository.GetUserByUserNameAsync(userName);
+            if (identity == null) throw new UserFriendlyErrorPageException(string.Format(IdentityServiceResources.UserDoesNotExist().Description, userName), IdentityServiceResources.UserDoesNotExist().Description);
+
+            var userDto = Mapper.Map<TUserDto>(identity);
+
+            await AuditEventLogger.LogEventAsync(new UserRequestedEvent<TUserDto>(userDto));
+
+            return userDto;
+        }
+
+        public async Task<TUserDto> GetUserByEmailAsync(string email)
+        {
+            var identity = await IdentityRepository.GetUserByEmailAsync(email);
+            if (identity == null) throw new UserFriendlyErrorPageException(string.Format(IdentityServiceResources.UserDoesNotExist().Description, email), IdentityServiceResources.UserDoesNotExist().Description);
+
+            var userDto = Mapper.Map<TUserDto>(identity);
+
+            await AuditEventLogger.LogEventAsync(new UserRequestedEvent<TUserDto>(userDto));
+
+            return userDto;
+        }
+
         public virtual async Task<(IdentityResult identityResult, TKey userId)> CreateUserAsync(TUserDto user)
         {
             var userIdentity = Mapper.Map<TUser>(user);
